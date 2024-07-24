@@ -1,17 +1,17 @@
-/**
- * Returns a Promise that resolves or rejects based on the input boolean.
- * @param {boolean} success - Determines whether to resolve or reject the promise.
- * @returns {Promise<Object>} - A promise that resolves with an object or rejects with an error.
- */
-export default function getFullResponseFromAPI(success) {
-  return new Promise((resolve, reject) => {
-    if (success) {
-      resolve({
-        status: 200,
-        body: 'Success'
-      });
-    } else {
-      reject(new Error('The fake API is not working currently'));
-    }
+// getFullResponseFromAPI.test.js
+import getFullResponseFromAPI from './getFullResponseFromAPI';
+
+describe('getFullResponseFromAPI', () => {
+  it('should resolve with the correct object when success is true', async () => {
+    const response = await getFullResponseFromAPI(true);
+    expect(response).toEqual({
+      status: 200,
+      body: 'Success'
+    });
   });
-}
+
+  it('should reject with an error when success is false', async () => {
+    await expect(getFullResponseFromAPI(false)).rejects.toThrow('The fake API is not working currently');
+  });
+});
+
