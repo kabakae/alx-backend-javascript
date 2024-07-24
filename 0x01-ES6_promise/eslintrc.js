@@ -2,7 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    jest: true,
+    jest: true, // Enable Jest globals
   },
   extends: [
     'eslint:recommended',
@@ -13,7 +13,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    // Add custom rules here
+    // Define custom rules if needed
   },
 };
 
