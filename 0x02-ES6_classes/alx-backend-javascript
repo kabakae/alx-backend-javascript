@@ -1,15 +1,14 @@
 {
   "name": "alx-backend-javascript",
   "version": "1.0.0",
-  "description": "Project for ALX Backend JavaScript module",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx babel-node 0x02-ES6_classes/0-main.js"
+    "dev": "npx babel-node"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/node": "^7.0.0",
