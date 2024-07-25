@@ -2,24 +2,15 @@ import Car from './10-car.js';
 
 export default class EVCar extends Car {
   constructor(brand, motor, color, range) {
-    super(brand, motor, color); // Initialize parent class
+    super(brand, motor, color); // Initialize the parent Car class
     this._range = range; // Initialize the range specific to EVCar
-
-    // Define properties with underscore for private attributes
-    Object.defineProperties(this, {
-      _brand: { value: brand, writable: true },
-      _motor: { value: motor, writable: true },
-      _color: { value: color, writable: true },
-      _range: { value: range, writable: true }
-    });
   }
 
   // Override cloneCar method
   cloneCar() {
-    const car = new Car();
-    car._brand = this._brand;
-    car._motor = this._motor;
-    car._color = this._color;
+    // Create a new Car instance with the same attributes as the current EVCar instance
+    const car = new Car(this._brand, this._motor, this._color);
     return car;
   }
 }
+
