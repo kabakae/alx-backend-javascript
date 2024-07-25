@@ -1,16 +1,20 @@
 import Car from './10-car.js';
 
-export default class EVCar extends Car {
+class EVCar extends Car {
   constructor(brand, motor, color, range) {
-    super(brand, motor, color); // Initialize the parent Car class
-    this._range = range; // Initialize the range specific to EVCar
+    super(); // Call the parent class constructor if needed
+    this._brand = brand;
+    this._motor = motor;
+    this._color = color;
+    this._range = range;
   }
 
-  // Override cloneCar method
+  // Override the cloneCar method
   cloneCar() {
-    // Create a new Car instance with the same attributes as the current EVCar instance
-    const car = new Car(this._brand, this._motor, this._color);
-    return car;
+    // Return a new instance of Car
+    return new Car();
   }
 }
+
+export default EVCar;
 
