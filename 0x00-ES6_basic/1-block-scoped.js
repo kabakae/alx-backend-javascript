@@ -3,11 +3,8 @@ export default function taskBlock(trueOrFalse) {
   const task2 = true;
 
   if (trueOrFalse) {
-    // Do not redeclare variables; use let or const to avoid block scoping issues.
-    const taskInside = true;
-    const task2Inside = false;
-    // These variables are intentionally not used to demonstrate block scoping
-    console.log(taskInside, task2Inside);
+    const taskInner = true;  // New variables to avoid redeclaration and unused variable errors
+    const task2Inner = false;
   }
 
   return [task, task2];
