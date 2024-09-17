@@ -5,7 +5,7 @@ console.log('Welcome to Holberton School, what is your name?');
 process.stdin.on('data', (data) => {
   const name = data.toString().trim(); // Convert input to string and remove any extra spaces or newlines
   console.log(`Your name is: ${name}`);
-  
+
   // Exit the program after input is provided
   process.exit();
 });
@@ -14,3 +14,6 @@ process.stdin.on('data', (data) => {
 process.on('exit', () => {
   console.log('This important software is now closing');
 });
+
+// Export the function (if needed for tests)
+module.exports = {};
