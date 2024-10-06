@@ -5,7 +5,7 @@ function countStudents(path) {
   try {
     // Read the file synchronously
     const data = fs.readFileSync(path, 'utf8');
-    
+
     // Split the data into lines and remove any empty lines
     const lines = data.split('\n').filter((line) => line.trim() !== '');
 
@@ -23,10 +23,13 @@ function countStudents(path) {
     for (let i = 1; i < lines.length; i += 1) {
       const studentData = lines[i].split(',');
 
-      if (studentData.length < 4) continue; // Skip invalid/incomplete lines
+      if (studentData.length < 4) {
+        // Skip invalid/incomplete lines
+        continue;
+      }
 
-      const firstName = studentData[0];
-      const field = studentData[3];
+      const firstName = studentData[0].trim();
+      const field = studentData[3].trim();
 
       if (!studentsByField[field]) {
         studentsByField[field] = [];
@@ -39,9 +42,11 @@ function countStudents(path) {
     console.log(`Number of students: ${totalStudents}`);
 
     // Log the number of students per field
-    for (const [field, students] of Object.entries(studentsByField)) {
-      console.log(`Number of students in ${field}: ${students.length}. List: ${students.join(', ')}`);
-    }
+    Object.entries(studentsByField).forEach(([field, students]) => {
+      console.log(
+        `Number of students in ${field}: ${students.length}. List: ${students.join(', ')}`
+      );
+    });
   } catch (err) {
     // If the file cannot be read, throw the required error message
     throw new Error('Cannot load the database');
@@ -49,4 +54,3 @@ function countStudents(path) {
 }
 
 module.exports = countStudents;
-
