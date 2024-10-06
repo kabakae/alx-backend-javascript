@@ -6,17 +6,16 @@ console.log('Welcome to Holberton School, what is your name?');
 // Read input from stdin
 process.stdin.setEncoding('utf-8');
 
+// Handle user input
 process.stdin.on('data', (input) => {
-  const name = input.trim(); // Trim any extra whitespace/newlines from the input
+  const name = input.trim();
   console.log(`Your name is: ${name}`);
 
-  if (process.stdin.isTTY) {
-    // TTY mode (interactive terminal), manually close when user presses Enter
-    process.exit();
-  }
+  // Explicitly end stdin to allow test cases to finish
+  process.stdin.end();
 });
 
-// When stdin is closed (in case of piping input), display the closing message
+// When stdin is closed (for piping scenarios), print closing message
 process.stdin.on('end', () => {
   console.log('This important software is now closing');
 });
