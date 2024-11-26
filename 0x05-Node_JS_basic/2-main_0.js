@@ -1,3 +1,4 @@
 const countStudents = require('./2-read_file');
 
-countStudents('nope.csv"';
+// Make sure to use the correct file name here
+countStudents('database.csv');
