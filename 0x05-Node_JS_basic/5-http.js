@@ -1,8 +1,7 @@
 const http = require('http');
 const fs = require('fs');
-const { parse } = require('path');
 
-// Function to count and group students
+// Function to count and group students dynamically by the last column in the CSV
 function countStudents(filePath) {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf-8', (err, data) => {
@@ -12,27 +11,32 @@ function countStudents(filePath) {
       }
 
       const lines = data.split('\n').filter((line) => line.trim() !== '');
-      if (lines.length === 0) {
+      if (lines.length < 2) {
         reject(new Error('No valid data found in the database'));
         return;
       }
 
-      const students = {};
-      const fields = lines.slice(1); // Skip the header
+      const header = lines[0].split(',');
+      const groupColumnIndex = header.length - 1; // Use the last column for grouping
+      const fields = lines.slice(1);
 
+      const students = {};
       fields.forEach((line) => {
-        const [firstName, field] = line.split(',').map((item) => item.trim());
-        if (firstName && field) {
-          if (!students[field]) {
-            students[field] = [];
+        const row = line.split(',');
+        const name = row[0];
+        const group = row[groupColumnIndex] ? row[groupColumnIndex].trim() : null;
+
+        if (name && group) {
+          if (!students[group]) {
+            students[group] = [];
           }
-          students[field].push(firstName);
+          students[group].push(name);
         }
       });
 
       let report = `Number of students: ${fields.length}`;
-      Object.entries(students).forEach(([field, names]) => {
-        report += `\nNumber of students in ${field}: ${names.length}. List: ${names.join(', ')}`;
+      Object.entries(students).forEach(([group, names]) => {
+        report += `\nNumber of students in ${group}: ${names.length}. List: ${names.join(', ')}`;
       });
 
       resolve(report);
