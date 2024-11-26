@@ -8,9 +8,7 @@ const app = http.createServer((req, res) => {
 });
 
 // Make the app listen on port 1245
-app.listen(1245, () => {
-  console.log('Server running at http://localhost:1245/');
-});
+app.listen(1245);
 
 // Export the app for potential testing or usage in other files
 module.exports = app;
