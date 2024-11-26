@@ -1,21 +1,19 @@
-#!/usr/bin/node
+#!/usr/bin/env node
 
-// Display welcome message
 console.log('Welcome to Holberton School, what is your name?');
 
-// Read input from stdin
-process.stdin.setEncoding('utf-8');
-
-// Handle user input
-process.stdin.on('data', (input) => {
-  const name = input.trim();
+// Listen for user input
+process.stdin.on('data', (data) => {
+  const name = data.toString().trim();
   console.log(`Your name is: ${name}`);
 
-  // Explicitly end stdin to allow test cases to finish
-  process.stdin.end();
+  // If the input is from an interactive terminal, exit immediately
+  if (process.stdin.isTTY) {
+    process.exit(0);
+  }
 });
 
-// When stdin is closed (for piping scenarios), print closing message
+// Handle closing message for piped input
 process.stdin.on('end', () => {
   console.log('This important software is now closing');
 });
