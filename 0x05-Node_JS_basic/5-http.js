@@ -1,73 +1,74 @@
 const http = require('http');
 const fs = require('fs');
-const countStudents = require('./3-read_file_async'); // Assuming you already have this function
+const { parse } = require('path');
+
+// Function to count and group students
+function countStudents(filePath) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, 'utf-8', (err, data) => {
+      if (err) {
+        reject(new Error('Cannot load the database'));
+        return;
+      }
+
+      const lines = data.split('\n').filter((line) => line.trim() !== '');
+      if (lines.length === 0) {
+        reject(new Error('No valid data found in the database'));
+        return;
+      }
+
+      const students = {};
+      const fields = lines.slice(1); // Skip the header
+
+      fields.forEach((line) => {
+        const [firstName, field] = line.split(',').map((item) => item.trim());
+        if (firstName && field) {
+          if (!students[field]) {
+            students[field] = [];
+          }
+          students[field].push(firstName);
+        }
+      });
+
+      let report = `Number of students: ${fields.length}`;
+      Object.entries(students).forEach(([field, names]) => {
+        report += `\nNumber of students in ${field}: ${names.length}. List: ${names.join(', ')}`;
+      });
+
+      resolve(report);
+    });
+  });
+}
 
 // Create the HTTP server
-const app = http.createServer((req, res) => {
-  const url = req.url;
-  const method = req.method;
+const app = http.createServer(async (req, res) => {
+  if (req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello Holberton School!');
+  } else if (req.url === '/students') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.write('This is the list of our students\n');
 
-  // If the URL path is /
-  if (url === '/') {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello Holberton School!\n');
-  }
-  // If the URL path is /students
-  else if (url === '/students') {
-    const filePath = process.argv[2]; // The database file path passed as an argument
-
-    if (!filePath) {
-      res.statusCode = 400;
-      res.end('Please provide a database file\n');
+    const dbFile = process.argv[2]; // Get the database file from arguments
+    if (!dbFile) {
+      res.end('Error: Missing database file');
       return;
     }
 
-    // Attempt to read and process the database file
-    countStudents(filePath)
-      .then(() => {
-        // We will send the student data as a response after processing
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/plain');
-        res.end(); // This ends the response, we'll send the actual content after resolving the promise
-      })
-      .catch((error) => {
-        res.statusCode = 500;
-        res.end(`Error: ${error.message}\n`);
-      });
-  }
-  // Handle any other request
-  else {
-    res.statusCode = 404;
-    res.end('Not Found\n');
+    try {
+      const report = await countStudents(dbFile);
+      res.end(report);
+    } catch (error) {
+      res.end(error.message);
+    }
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
   }
 });
 
-// Listen on port 1245
-app.listen(1245, () => {
-  // Start listening on port 1245
-  console.log('Server running at http://localhost:1245/');
+// Server listens on port 1245
+app.listen(1245);
 
-  // After the server starts, we want to display the student data
-  const filePath = process.argv[2]; // The database file path passed as an argument
-
-  if (!filePath) {
-    console.log('Please provide a database file');
-    return;
-  }
-
-  // Process the student data in the file and display in the terminal
-  countStudents(filePath)
-    .then(() => {
-      // This part will execute after the CSV file is processed
-      console.log('Number of students: 10');
-      console.log('Number of students in CS: 6. List: Johann, Arielle, Jonathan, Emmanuel, Guillaume, Katie');
-      console.log('Number of students in SWE: 4. List: Guillaume, Joseph, Paul, Tommy');
-    })
-    .catch((error) => {
-      console.error('Error: ' + error.message);
-    });
-});
-
-// Export the app for potential testing or usage in other files
 module.exports = app;
+
