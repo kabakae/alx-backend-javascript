@@ -1,23 +1,24 @@
+// 1-calcul.js
 function calculateNumber(type, a, b) {
-  // Round the input numbers
-  const num1 = Math.round(a);
-  const num2 = Math.round(b);
+  // Round both numbers
+  a = Math.round(a);
+  b = Math.round(b);
 
-  // Perform operations based on the type
   if (type === 'SUM') {
-    return num1 + num2;
+    return a + b;
   } else if (type === 'SUBTRACT') {
-    return num1 - num2;
+    return a - b;
   } else if (type === 'DIVIDE') {
-    // Check for division by zero
-    if (num2 === 0) {
+    if (b === 0) {
       return 'Error';
+    } else {
+      return (a / b).toFixed(1); // Rounding the division result to one decimal place
     }
-    return num1 / num2;
   } else {
-    throw new Error('Invalid operation type');
+    return 'Invalid type'; // In case an invalid type is passed
   }
 }
 
 module.exports = calculateNumber;
+
 
